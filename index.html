@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Homework Submission Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>C++ Homework Submission Portal</h1>
+            <p class="subtitle">Submit your C++ solutions here</p>
+        </header>
+
+        <main class="main-content">
+            <div class="card">
+                <!-- Question Display -->
+                <div id="questionDisplay" class="question-display">
+                    <div id="questionLoading" class="loading-text">
+                        Loading question...
+                    </div>
+                    <div id="questionContent" class="question-content hidden">
+                        <div class="question-header">
+                            <h2 id="questionTitle"></h2>
+                            <div class="timer-container">
+                                <div class="timer-label">Time Remaining:</div>
+                                <div id="timer" class="timer">00:00</div>
+                            </div>
+                        </div>
+                        <div class="question-description" id="questionDescription"></div>
+                    </div>
+                    <div id="noActiveQuestion" class="no-question hidden">
+                        <div class="empty-state">
+                            <div class="empty-icon">📝</div>
+                            <h3>No Active Questions</h3>
+                            <p>There are no active questions available at the moment.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submission Form -->
+                <div id="submissionSection" class="submission-section hidden">
+                    <form id="submissionForm" class="form">
+                        <div class="form-group">
+                            <label for="fullName">Full Name *</label>
+                            <input 
+                                type="text" 
+                                id="fullName" 
+                                name="fullName" 
+                                required 
+                                placeholder="Enter your full name"
+                                autocomplete="name"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="solution">C++ Solution *</label>
+                            <div class="code-container">
+                                <textarea 
+                                    id="solution" 
+                                    name="solution" 
+                                    required 
+                                    placeholder="Paste your C++ code here..."
+                                    rows="12"
+                                    class="code-textarea"
+                                ></textarea>
+                                <div class="code-actions">
+                                    <span class="char-counter">
+                                        <span id="charCount">0</span> / 10000 characters
+                                    </span>
+                                    <button type="button" id="copyBtn" class="btn btn-secondary btn-small">
+                                        Copy Code
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" id="submitBtn" class="btn btn-primary">
+                                <span id="btnText">Submit Solution</span>
+                                <div id="spinner" class="spinner hidden"></div>
+                            </button>
+                        </div>
+                    </form>
+
+                    <div id="successMessage" class="success-message hidden">
+                        <div class="success-icon">✓</div>
+                        <h3>Submission Successful!</h3>
+                        <p>Your solution has been submitted successfully.</p>
+                    </div>
+
+                    <div id="errorMessage" class="error-message hidden">
+                        <div class="error-icon">✗</div>
+                        <h3>Submission Failed</h3>
+                        <p id="errorText">An error occurred. Please try again.</p>
+                    </div>
+
+                    <div id="timeUpMessage" class="time-up-message hidden">
+                        <div class="time-up-icon">⏰</div>
+                        <h3>Time's Up!</h3>
+                        <p>The submission time has expired. No more submissions will be accepted.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

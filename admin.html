@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - C++ Homework Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Admin Dashboard</h1>
+            <p class="subtitle">Manage C++ Homework Submissions</p>
+        </header>
+
+        <main class="main-content">
+            <div class="card">
+                <div class="dashboard-tabs">
+                    <button id="questionsTab" class="tab-btn active">Questions</button>
+                    <button id="submissionsTab" class="tab-btn">Submissions</button>
+                </div>
+
+                <!-- Questions Section -->
+                <div id="questionsSection" class="tab-content">
+                    <div class="section-header">
+                        <h2>Manage Questions</h2>
+                        <button id="addQuestionBtn" class="btn btn-primary">
+                            Add New Question
+                        </button>
+                    </div>
+
+                    <div id="questionForm" class="question-form hidden">
+                        <h3>Create New Question</h3>
+                        <form id="createQuestionForm" class="form">
+                            <div class="form-group">
+                                <label for="questionTitle">Question Title *</label>
+                                <input 
+                                    type="text" 
+                                    id="questionTitle" 
+                                    name="questionTitle" 
+                                    required 
+                                    placeholder="Enter question title"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="questionDescription">Question Description *</label>
+                                <textarea 
+                                    id="questionDescription" 
+                                    name="questionDescription" 
+                                    required 
+                                    placeholder="Describe the problem..."
+                                    rows="4"
+                                ></textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="timerType">Timer Type *</label>
+                                    <select id="timerType" name="timerType" required>
+                                        <option value="countdown">Countdown (per student)</option>
+                                        <option value="scheduled">Scheduled (global time window)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="timerMinutes">Duration (minutes) *</label>
+                                    <input 
+                                        type="number" 
+                                        id="timerMinutes" 
+                                        name="timerMinutes" 
+                                        required 
+                                        min="1" 
+                                        max="180"
+                                        placeholder="30"
+                                    >
+                                </div>
+                            </div>
+
+                            <div id="scheduledTimeFields" class="scheduled-fields hidden">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="startTime">Start Time *</label>
+                                        <input 
+                                            type="datetime-local" 
+                                            id="startTime" 
+                                            name="startTime"
+                                        >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="endTime">End Time *</label>
+                                        <input 
+                                            type="datetime-local" 
+                                            id="endTime" 
+                                            name="endTime"
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="questionStatus">Status</label>
+                                    <select id="questionStatus" name="questionStatus">
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Create Question</button>
+                                <button type="button" id="cancelQuestionBtn" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="questions-list">
+                        <h3>Existing Questions</h3>
+                        <div id="questionsContainer" class="questions-grid">
+                            <div class="loading-text">Loading questions...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submissions Section -->
+                <div id="submissionsSection" class="tab-content hidden">
+                    <div class="dashboard-controls">
+                        <div class="search-container">
+                            <input 
+                                type="text" 
+                                id="searchInput" 
+                                placeholder="Search by student name..."
+                                class="search-input"
+                            >
+                        </div>
+                        <div class="action-buttons">
+                            <button id="refreshBtn" class="btn btn-secondary">
+                                Refresh
+                            </button>
+                            <button id="exportBtn" class="btn btn-primary">
+                                Export to CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="submissionsTable" class="submissions-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Question</th>
+                                    <th>Solution</th>
+                                    <th>Time</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="submissionsBody">
+                                <tr class="loading-row">
+                                    <td colspan="5">Loading submissions...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="noSubmissions" class="no-submissions hidden">
+                        <div class="empty-state">
+                            <div class="empty-icon">📋</div>
+                            <h3>No Submissions Yet</h3>
+                            <p>Students haven't submitted any homework yet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for viewing full solution -->
+    <div id="solutionModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Solution</h3>
+                <button id="closeModal" class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-info">
+                    <p><strong>Student:</strong> <span id="modalName"></span></p>
+                    <p><strong>Problem:</strong> <span id="modalProblem"></span></p>
+                    <p><strong>Time:</strong> <span id="modalTime"></span></p>
+                </div>
+                <div class="code-viewer">
+                    <div class="code-header">
+                        <span>C++ Solution</span>
+                        <button id="modalCopyBtn" class="btn btn-secondary btn-small">
+                            Copy Code
+                        </button>
+                    </div>
+                    <pre id="modalCode"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
