@@ -54,30 +54,14 @@
                                 ></textarea>
                             </div>
 
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="timerType">Timer Type *</label>
-                                    <select id="timerType" name="timerType" required>
-                                        <option value="countdown">Countdown (per student)</option>
-                                        <option value="scheduled">Scheduled (global time window)</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="timerMinutes">Duration (minutes) *</label>
-                                    <input 
-                                        type="number" 
-                                        id="timerMinutes" 
-                                        name="timerMinutes" 
-                                        required 
-                                        min="1" 
-                                        max="180"
-                                        placeholder="30"
-                                    >
-                                </div>
+                            <div class="form-group">
+                                <label for="timerType">Timer Type</label>
+                                <select id="timerType" name="timerType">
+                                    <option value="scheduled">Scheduled (global time window)</option>
+                                </select>
                             </div>
 
-                            <div id="scheduledTimeFields" class="scheduled-fields hidden">
+                            <div id="scheduledTimeFields" class="scheduled-fields">
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="startTime">Start Time *</label>
@@ -85,6 +69,7 @@
                                             type="datetime-local" 
                                             id="startTime" 
                                             name="startTime"
+                                            required
                                         >
                                     </div>
 
@@ -94,6 +79,7 @@
                                             type="datetime-local" 
                                             id="endTime" 
                                             name="endTime"
+                                            required
                                         >
                                     </div>
                                 </div>

@@ -104,12 +104,8 @@ class HomeworkSubmission {
         this.questionTitle.textContent = this.currentQuestion.title;
         this.questionDescription.textContent = this.currentQuestion.description;
         
-        // Start appropriate timer
-        if (this.currentQuestion.timerType === 'scheduled') {
-            this.startScheduledTimer();
-        } else {
-            this.startTimer(this.currentQuestion.timerMinutes * 60);
-        }
+        // Start appropriate timer (always scheduled now)
+        this.startScheduledTimer();
     }
     
     startScheduledTimer() {
@@ -147,6 +143,9 @@ class HomeworkSubmission {
             this.timeRemaining = Math.floor((endTime - now) / 1000);
             this.timeExpired = false;
             
+            // Show question description when question is active
+            this.questionDescription.style.display = 'block';
+            
             this.updateTimerDisplay();
             
             this.timerInterval = setInterval(() => {
@@ -166,6 +165,9 @@ class HomeworkSubmission {
         this.submitBtn.textContent = 'Question Not Started';
         this.solutionTextarea.disabled = true;
         this.fullNameInput.disabled = true;
+        
+        // Hide question description during waiting state
+        this.questionDescription.style.display = 'none';
         
         // Show waiting message instead of form
         this.form.classList.add('hidden');
@@ -260,6 +262,9 @@ class HomeworkSubmission {
     timerExpired() {
         clearInterval(this.timerInterval);
         this.timeExpired = true;
+        
+        // Hide question description when time is up
+        this.questionDescription.style.display = 'none';
         
         // Disable form
         this.submitBtn.disabled = true;

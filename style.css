@@ -307,6 +307,13 @@ body {
     color: #2c3e50;
     line-height: 1.6;
     font-size: 1.1rem;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    white-space: pre-wrap;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    overflow-x: auto;
 }
 
 .no-question {
@@ -541,6 +548,28 @@ body {
     border-color: #4a90e2;
     background: white;
     box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.1);
+}
+
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    resize: vertical;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+#questionDescription {
+    white-space: pre-wrap;
+    line-height: 1.5;
 }
 
 .action-buttons {

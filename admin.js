@@ -51,7 +51,6 @@ class AdminDashboard {
         this.addQuestionBtn.addEventListener('click', () => this.showQuestionForm());
         this.cancelQuestionBtn.addEventListener('click', () => this.hideQuestionForm());
         this.createQuestionForm.addEventListener('submit', (e) => this.handleCreateQuestion(e));
-        this.timerType.addEventListener('change', () => this.handleTimerTypeChange());
         
         // Submissions
         this.searchInput.addEventListener('input', () => this.handleSearch());
@@ -136,9 +135,7 @@ class AdminDashboard {
         }
         
         const html = this.questions.map(question => {
-            const timerInfo = question.timerType === 'scheduled' 
-                ? `📅 ${this.formatDateTime(question.startTime)} - ${this.formatDateTime(question.endTime)}`
-                : `⏱️ ${question.timerMinutes} minutes`;
+            const timerInfo = `📅 ${this.formatDateTime(question.startTime)} - ${this.formatDateTime(question.endTime)}`;
             
             return `
                 <div class="question-card ${question.status === 'inactive' ? 'inactive' : ''}">
@@ -156,7 +153,7 @@ class AdminDashboard {
                     <div class="question-meta">
                         <div class="timer-info">
                             ${timerInfo}
-                            <br><small>Type: ${question.timerType === 'scheduled' ? 'Scheduled' : 'Countdown'}</small>
+                            <br><small>Scheduled Time Window</small>
                         </div>
                         <div class="question-actions">
                             ${question.status === 'active' 
@@ -193,27 +190,20 @@ class AdminDashboard {
     showQuestionForm() {
         this.questionForm.classList.remove('hidden');
         this.addQuestionBtn.classList.add('hidden');
+        
+        // Set default times for scheduled fields
+        const now = new Date();
+        const defaultStart = new Date(now.getTime() + 60 * 60 * 1000); // +1 hour
+        const defaultEnd = new Date(now.getTime() + 90 * 60 * 1000); // +1.5 hours
+        
+        this.startTime.value = this.formatDateTimeLocal(defaultStart);
+        this.endTime.value = this.formatDateTimeLocal(defaultEnd);
     }
     
     hideQuestionForm() {
         this.questionForm.classList.add('hidden');
         this.addQuestionBtn.classList.remove('hidden');
         this.createQuestionForm.reset();
-    }
-    
-    handleTimerTypeChange() {
-        if (this.timerType.value === 'scheduled') {
-            this.scheduledTimeFields.classList.remove('hidden');
-            // Set default times (current time + 1 hour to current time + 1.5 hours)
-            const now = new Date();
-            const defaultStart = new Date(now.getTime() + 60 * 60 * 1000); // +1 hour
-            const defaultEnd = new Date(now.getTime() + 90 * 60 * 1000); // +1.5 hours
-            
-            this.startTime.value = this.formatDateTimeLocal(defaultStart);
-            this.endTime.value = this.formatDateTimeLocal(defaultEnd);
-        } else {
-            this.scheduledTimeFields.classList.add('hidden');
-        }
     }
     
     formatDateTimeLocal(date) {
@@ -231,17 +221,12 @@ class AdminDashboard {
         const formData = {
             title: document.getElementById('questionTitle').value.trim(),
             description: document.getElementById('questionDescription').value.trim(),
-            timerMinutes: parseInt(document.getElementById('timerMinutes').value),
-            timerType: this.timerType.value,
+            timerType: 'scheduled', // Always scheduled now
+            startTime: new Date(this.startTime.value),
+            endTime: new Date(this.endTime.value),
             status: document.getElementById('questionStatus').value,
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         };
-        
-        // Add scheduled times if selected
-        if (formData.timerType === 'scheduled') {
-            formData.startTime = new Date(this.startTime.value);
-            formData.endTime = new Date(this.endTime.value);
-        }
         
         try {
             await db.collection('questions').add(formData);
